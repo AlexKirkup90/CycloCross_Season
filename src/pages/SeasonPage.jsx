@@ -25,7 +25,7 @@ function formatShortDate(dateStr) {
 function formatSeasonLabel(s) {
   const d = new Date(s.target_event_date + 'T00:00:00')
   const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-  return `${s.programme_name} — ${s.programme_weeks}wk — ${dateStr}`
+  return `${s.name} — ${s.programme_weeks}wk — ${dateStr}`
 }
 
 function isCurrentWeek(weekStartDate) {
