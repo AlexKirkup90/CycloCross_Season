@@ -36,6 +36,7 @@ export function useSeasons(athleteId) {
         name: seasonData.name || seasonData.programme_name,
         target_event_name: seasonData.target_event_name,
         target_event_date: seasonData.target_event_date,
+        end_date: seasonData.target_event_date,
         programme_weeks: seasonData.programme_weeks,
         start_date: seasonData.start_date,
       })
