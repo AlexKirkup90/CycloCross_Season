@@ -147,7 +147,7 @@ export function generateProgramme({ targetEventDate, programmeWeeks, programmeNa
   })
 
   const season = {
-    programme_name: programmeName,
+    name: programmeName,
     target_event_name: targetEventName,
     target_event_date: targetEventDate,
     programme_weeks: programmeWeeks,
