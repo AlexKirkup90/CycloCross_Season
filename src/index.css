@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F4F7FB;
+    color: #0F1F3D;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+  }
+  * { box-sizing: border-box; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-xl shadow-sm border border-border p-5; }
+  .card-navy { @apply bg-navy text-white rounded-xl p-5; }
+  .btn-primary { @apply bg-sky text-navy font-bold px-5 py-2.5 rounded-lg hover:bg-sky-dark active:scale-95 transition-all cursor-pointer border-none; }
+  .btn-navy { @apply bg-navy text-white font-bold px-5 py-2.5 rounded-lg hover:bg-navy-light active:scale-95 transition-all cursor-pointer border-none; }
+  .btn-ghost { @apply bg-transparent text-text-secondary border border-border px-4 py-2 rounded-lg hover:bg-surface-secondary transition-all cursor-pointer; }
+  .form-input { @apply w-full px-3 py-2.5 bg-white border border-border text-text-primary rounded-lg focus:outline-none focus:border-sky transition-colors; }
+  .form-label { @apply block mb-1.5 text-sm font-medium text-text-secondary; }
+  .phase-badge { @apply text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide; }
+  .stat-card { @apply bg-white rounded-xl border border-border p-4 flex flex-col gap-1; }
+}
