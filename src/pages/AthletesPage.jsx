@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAthletes } from '../hooks/useAthletes'
 import { supabase } from '../lib/supabase'
+import AthleteProfile from '../components/AthleteProfile'
 
 const DISCIPLINES = ['CX', 'Road', 'CX+Road', 'Gravel']
 const EXPERIENCES = ['Beginner', 'Intermediate', 'Elite']
@@ -18,8 +19,10 @@ const EXPERIENCE_COLOURS = {
   Elite: 'bg-red-100 text-red-700',
 }
 
-export default function AthletesPage() {
+export default function AthletesPage({ selectedAthleteId }) {
   const { athletes, loading, error, refetch } = useAthletes()
+
+  const [expandedId, setExpandedId] = useState(null)
 
   const [form, setForm] = useState({
     name: '',
@@ -32,6 +35,10 @@ export default function AthletesPage() {
 
   function handleChange(e) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+  }
+
+  function toggleExpanded(id) {
+    setExpandedId(prev => (prev === id ? null : id))
   }
 
   async function handleSubmit(e) {
@@ -74,31 +81,61 @@ export default function AthletesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {athletes.map(athlete => (
-            <div key={athlete.id} className="card flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                {athlete.name.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-text-primary truncate">{athlete.name}</p>
-                {athlete.email && (
-                  <p className="text-text-muted text-xs truncate">{athlete.email}</p>
-                )}
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  {athlete.discipline && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${DISCIPLINE_COLOURS[athlete.discipline] || 'bg-gray-100 text-gray-600'}`}>
-                      {athlete.discipline}
-                    </span>
-                  )}
-                  {athlete.experience && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${EXPERIENCE_COLOURS[athlete.experience] || 'bg-gray-100 text-gray-600'}`}>
-                      {athlete.experience}
-                    </span>
-                  )}
+          {athletes.map(athlete => {
+            const isSelected = selectedAthleteId && selectedAthleteId === athlete.id
+            const isExpanded = expandedId === athlete.id
+
+            return (
+              <div
+                key={athlete.id}
+                className={`card transition-all ${
+                  isSelected ? 'border-2 border-sky' : 'border border-border'
+                }`}
+              >
+                {/* Card header row */}
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {athlete.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-text-primary truncate">{athlete.name}</p>
+                    {athlete.email && (
+                      <p className="text-text-muted text-xs truncate">{athlete.email}</p>
+                    )}
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      {athlete.discipline && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${DISCIPLINE_COLOURS[athlete.discipline] || 'bg-gray-100 text-gray-600'}`}>
+                          {athlete.discipline}
+                        </span>
+                      )}
+                      {athlete.experience && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${EXPERIENCE_COLOURS[athlete.experience] || 'bg-gray-100 text-gray-600'}`}>
+                          {athlete.experience}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => toggleExpanded(athlete.id)}
+                    className="text-xs font-medium text-sky-dark border border-sky rounded px-2.5 py-1 hover:bg-sky hover:text-white transition-colors cursor-pointer flex-shrink-0"
+                  >
+                    {isExpanded ? 'Close' : 'Edit Profile'}
+                  </button>
                 </div>
+
+                {/* Expanded profile panel */}
+                {isExpanded && (
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <AthleteProfile
+                      athlete={athlete}
+                      onUpdate={refetch}
+                    />
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
