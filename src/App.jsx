@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
@@ -18,6 +18,18 @@ function AppShell() {
   const { athletes } = useAthletes()
 
 
+  useEffect(() => {
+    if (!athletes.length) {
+      if (selectedAthleteId) setSelectedAthleteId('')
+      return
+    }
+
+    const exists = athletes.some(athlete => athlete.id === selectedAthleteId)
+    if (!selectedAthleteId || !exists) {
+      setSelectedAthleteId(athletes[0].id)
+    }
+  }, [athletes, selectedAthleteId])
+
   if (session === undefined) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center">
@@ -30,7 +42,7 @@ function AppShell() {
 
   const pages = {
     dashboard: <DashboardPage selectedAthleteId={selectedAthleteId} />,
-    athletes: <AthletesPage selectedAthleteId={selectedAthleteId} />,
+    athletes: <AthletesPage />,
     season: <SeasonPage selectedAthleteId={selectedAthleteId} />,
     analytics: <AnalyticsPage selectedAthleteId={selectedAthleteId} />,
     settings: <SettingsPage />,
