@@ -43,6 +43,13 @@ const { sessionLibrarySeed } = await import(
 async function seed() {
   console.log(`Checking sessions_library...`)
 
+  // Schema probe — logs actual column names so mismatches are immediately visible
+  const { data: sample } = await supabase.from('sessions_library').select('*').limit(1)
+  console.log('Table columns check - inserting test row to see schema error details')
+  if (sample && sample.length > 0) {
+    console.log('Existing columns:', Object.keys(sample[0]).join(', '))
+  }
+
   const { count, error: countErr } = await supabase
     .from('sessions_library')
     .select('*', { count: 'exact', head: true })
