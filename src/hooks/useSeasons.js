@@ -31,7 +31,14 @@ export function useSeasons(athleteId) {
   const createSeason = useCallback(async (seasonData, weeksData) => {
     const { data: season, error: seasonErr } = await supabase
       .from('seasons')
-      .insert({ ...seasonData, athlete_id: athleteId })
+      .insert({
+        name: seasonData.programme_name ?? seasonData.name,
+        target_event_name: seasonData.target_event_name,
+        target_event_date: seasonData.target_event_date,
+        programme_weeks: seasonData.programme_weeks,
+        start_date: seasonData.start_date,
+        athlete_id: athleteId,
+      })
       .select()
       .single()
     if (seasonErr) throw seasonErr
