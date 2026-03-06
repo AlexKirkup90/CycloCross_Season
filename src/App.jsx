@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
+import { useAthletes } from './hooks/useAthletes'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import AthletesPage from './pages/AthletesPage'
@@ -14,7 +15,8 @@ function AppShell() {
   const { session } = useAuth()
   const [activePage, setActivePage] = useState('dashboard')
   const [selectedAthleteId, setSelectedAthleteId] = useState('')
-  const [athletes, setAthletes] = useState([])
+
+  const { athletes } = useAthletes()
 
   if (session === undefined) {
     return (
